@@ -248,9 +248,21 @@
         }
     }
 
-    async function fetchData() {
-        let cityName = document.getElementsByClassName('inputfield')[0].value;
+async function fetchData() {
+    let cityName = document.getElementsByClassName('inputfield')[0].value;
+
+    if (!cityName) {
+        alert("Please enter a city name.");
+        return;
+    }
+
+    try {
         let requestData = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=d28274b5fe592e1f1e558103a5e66370&units=metric`);
+        
+        if (!requestData.ok) {
+            throw new Error("City not found");
+        }
+
         let formattedData = await requestData.json();
         console.log("Formatted Data: ", formattedData);
 
@@ -286,7 +298,13 @@
         fetchAQIData(lat, lon);
         nextFiveDays(lat, lon);
         todayTemps(lat, lon);
+    } catch (error) {
+        alert("City not found. Please enter a valid city name.");
+        console.error(error);
     }
+}
+
+    
 </script>
 
 
